@@ -3,12 +3,19 @@
 ;; fds
 (define home "not_written")
 
-(let [(mbhome (maybe-get-env-var "HOME"))]
+(let [(mbwhome (maybe-get-env-var "WAKATIME_HOME")) (mbhome (maybe-get-env-var "HOME"))]
     (cond
-        [(Ok? mbhome) (set! home (unwrap-ok mbhome))]
-        [else (set! home "it's an error")]
+        [(Ok? mbwhome) (set! home (unwrap-ok mbwhome))]
+        [else (cond
+        [(Ok? mbhome)(set! home (unwrap-ok mbhome))]
+        [else (set! home "UNKNOWN")]
+        )]
     )
 )
 
+(define shared_state_parent_dir (string-append home "/.wakatime"))
+
 
 (displayln home)
+
+(displayln shared_state_parent_dir)

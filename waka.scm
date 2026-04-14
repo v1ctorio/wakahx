@@ -1,5 +1,5 @@
 (require "helix/editor.scm")
-(require-builtin steel/core/result)
+(require "steel/result")
 (require-builtin steel/process)
 (require-builtin steel/strings)
 (require-builtin steel/time)
@@ -25,3 +25,8 @@
         )]
     )
 )
+
+(define shared_state_parent_dir (string-append home "/.wakatime"))
+(define shared_state_file (string-append home "/helix_shared_state"))
+
+(displayln waka.scm)
