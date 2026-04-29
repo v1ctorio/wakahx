@@ -15,6 +15,7 @@
 (define cursor_col #f)
 (define home "")
 (define message "")
+(define current-path "TODO")
 
 (define (get-cursor-row-col)
   (match (current-cursor)
@@ -40,8 +41,17 @@
 (define hb_last_sent (system-time/now))
 (define last_heartbeat (hash 'last_activity_at 0 'last_heartbeat_at 0 'file ""))
 
-(define wakatimecliversion spawn-process (run-shell-command "wakatime-cli" (list "--version")
+(define wakatimecliversion (run-shell-command "uname"))
+
+
 (echo wakatimecliversion)
-(if (not wakatimecliversion))) 
-[set! message "Wakatime cli not found!"]
-)
+;(if (not wakatimecliversion) 
+;[set! message "Wakatime cli not found!"]
+;)
+
+(define (shell cmd args)
+  (define expanded (map (lambda (x) (if (equal? x "%") (current-path) x)) args))
+  (apply run-shell-command (append (list "cmd") expanded)))
+
+(pas)
+(shell "notify-send" (list "add"))
