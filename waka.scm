@@ -41,17 +41,37 @@
 (define hb_last_sent (system-time/now))
 (define last_heartbeat (hash 'last_activity_at 0 'last_heartbeat_at 0 'file ""))
 
-(define wakatimecliversion (run-shell-command "uname"))
+;(define wakatimecliversion (run-shell-command "uname"))
 
 
-(echo wakatimecliversion)
 ;(if (not wakatimecliversion) 
 ;[set! message "Wakatime cli not found!"]
 ;)
+
+(define (helixw-error err)
+  ; do something with the error
+)
+
+
+; args must be a list idk how to enforce types in ts lang
+(define (run-wakatime-cli args)
+  (let ([proc (~> (command "wakatime-cli" args)
+                  with-stdout-piped
+                  with-stderr-piped
+                  spawn-process
+                  )])
+                  (if (Ok? proc)
+                    (let ([stderr (read-port-to-string (child-stderr (Ok->value proc)))])
+                      (when (not (string=? (trim stderr) ""))
+                        (error (trim stderr))
+                      )
+                    )
+                  )
+  )
+)
 
 (define (shell cmd args)
   (define expanded (map (lambda (x) (if (equal? x "%") (current-path) x)) args))
   (apply run-shell-command (append (list "cmd") expanded)))
 
-(pas)
-(shell "notify-send" (list "add"))
+;(shell "notify-send" (list "add"))
